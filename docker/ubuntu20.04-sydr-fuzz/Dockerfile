@@ -8,8 +8,11 @@ RUN apt-get update && \
     apt-get -y install build-essential gcc-multilib g++-multilib git \
                        wget curl unzip clang-11 vim lsb-release zlib1g-dev \
                        lcov pkg-config libglib2.0-dev gcc-10 g++-10 \
-                       gcc-10-plugin-dev gcc-10-multilib python3 python3-pip \
-                       libtool gnuplot binutils-dev zip htop psutils openjdk-17-jdk
+                       gcc-10-plugin-dev gcc-10-multilib python3.9 python3.9-dev \
+                       python3-pip libtool gnuplot binutils-dev zip htop psutils openjdk-17-jdk
+
+RUN rm /usr/bin/python3 && ln -s /usr/bin/python3.9 /usr/bin/python3
+RUN pip3 install --upgrade pip
 
 RUN wget https://ftp.gnu.org/gnu/gdb/gdb-12.1.tar.xz && tar xf gdb-*.tar.xz && \
     cd gdb-* && ./configure && make -j$(nproc) && make install && cd .. && \
@@ -30,11 +33,13 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 
 RUN cargo install cargo-fuzz
 
-RUN cargo install afl
+RUN cargo install afl@0.13.5
 
 RUN rustup component add llvm-tools-preview
 
 RUN rustup component add rust-src --toolchain nightly
+
+RUN rustup component add rustfmt clippy
 
 RUN wget https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-linux.zip \
     && unzip ninja-linux.zip && mv ninja /usr/bin && rm ninja-linux.zip
@@ -73,9 +78,9 @@ ENV AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
 ENV IS_DOCKER="1"
 
 RUN git clone https://github.com/AFLplusplus/AFLplusplus.git && cd AFLplusplus && \
-    git checkout v4.08c && export CC=clang && export CXX=clang++ && \
+    git checkout v4.21c && export CC=clang && export CXX=clang++ && \
     export LD_LIBRARY_PATH="$(llvm-config --libdir)${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" && make clean && \
-    make distrib -j $(nproc) && make install -j $(nproc) && make clean && cd .. && rm -rf AFLplusplus
+    PERFORMANCE=1 make distrib -j $(nproc) && make install -j $(nproc) && make clean && cd .. && rm -rf AFLplusplus
 
 ENV PATH=$PATH:/fuzz/sydr
 
@@ -111,5 +116,27 @@ RUN git clone https://github.com/CodeIntelligenceTesting/jazzer.git && cd jazzer
 RUN mkdir /usr/local/lib/jacoco && cd /usr/local/lib/jacoco && \
     wget https://github.com/jacoco/jacoco/releases/download/v0.8.10/jacoco-0.8.10.zip && \
     unzip jacoco*.zip && rm -rf jacoco*.zip
+
+# Install Node.js and Jazzer.js
+RUN mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    export NODE_MAJOR=20 && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+    apt update && apt install -y nodejs
+RUN mkdir jazzer.js
+WORKDIR /jazzer.js
+RUN npm install --save-dev @jazzer.js/core
+
+# Install .NET, Sharpfuzz, minicover, altcover
+RUN wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
+    && dpkg -i packages-microsoft-prod.deb \
+    && rm packages-microsoft-prod.deb \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        dotnet-sdk-8.0
+RUN dotnet tool install SharpFuzz.CommandLine --global
+RUN dotnet tool install minicover --global
+RUN dotnet tool install altcover.global --global
+ENV PATH=$PATH:/root/.dotnet/tools
 
 WORKDIR /

@@ -1,8 +1,8 @@
 # Trophies
 
 [Sydr-fuzz](https://sydr-fuzz.github.io) discovered
-148 new bugs in
-29 open source projects.
+166 new bugs in
+30 open source projects.
 
 * audk:
     * <https://github.com/acidanthera/audk/commit/7da674d1c923b52013bd108f82211b1561880c55>
@@ -85,6 +85,12 @@
     * <https://github.com/ntop/nDPI/pull/2034>
 * OpenJPEG (OpenCV 3rdparty):
     * <https://github.com/opencv/opencv/issues/22284>
+    * <https://github.com/uclouvain/openjpeg/pull/1488>
+    * <https://github.com/uclouvain/openjpeg/pull/1489>
+    * <https://github.com/uclouvain/openjpeg/pull/1490>
+    * <https://github.com/uclouvain/openjpeg/pull/1491>
+    * <https://github.com/uclouvain/openjpeg/pull/1492>
+    * <https://github.com/uclouvain/openjpeg/pull/1530>
 * OpenXLSX:
     * <https://github.com/troldal/OpenXLSX/issues/140>
     * <https://github.com/troldal/OpenXLSX/issues/139>
@@ -92,10 +98,10 @@
     * <https://gitlab.freedesktop.org/poppler/poppler/-/issues/1268>
     * <https://gitlab.freedesktop.org/poppler/poppler/-/issues/1269> ([PR](https://gitlab.freedesktop.org/poppler/poppler/-/merge_requests/1221))
 * PyTorch:
-    * <https://github.com/pytorch/pytorch/issues/77561> (PR: <https://github.com/pytorch/pytorch/pull/79192>)
-    * <https://github.com/pytorch/pytorch/issues/77563> (PR: <https://github.com/pytorch/pytorch/pull/79192>)
-    * <https://github.com/pytorch/pytorch/issues/77573> (PR: <https://github.com/pytorch/pytorch/pull/79192>)
-    * <https://github.com/pytorch/pytorch/issues/77575> (PR: <https://github.com/pytorch/pytorch/pull/79192>)
+    * <https://github.com/pytorch/pytorch/issues/77561> ([PR](<https://github.com/pytorch/pytorch/pull/79192>))
+    * <https://github.com/pytorch/pytorch/issues/77563> ([PR](<https://github.com/pytorch/pytorch/pull/79192>))
+    * <https://github.com/pytorch/pytorch/issues/77573> ([PR](<https://github.com/pytorch/pytorch/pull/79192>))
+    * <https://github.com/pytorch/pytorch/issues/77575> ([PR](<https://github.com/pytorch/pytorch/pull/79192>))
     * <https://github.com/pytorch/pytorch/pull/77557>
     * <https://github.com/pytorch/pytorch/pull/94815>
     * <https://github.com/pytorch/pytorch/pull/91401>
@@ -103,8 +109,8 @@
     * <https://github.com/pytorch/pytorch/pull/94297>
     * <https://github.com/pytorch/pytorch/pull/103327>
     * <https://github.com/pytorch/pytorch/pull/94300>
-    * <https://github.com/pytorch/pytorch/issues/95061> (PR: <https://github.com/pytorch/pytorch/pull/95221>)
-    * <https://github.com/pytorch/pytorch/issues/95062> (PR: <https://github.com/pytorch/pytorch/pull/95221>)
+    * <https://github.com/pytorch/pytorch/issues/95061> ([PR](<https://github.com/pytorch/pytorch/pull/95221>))
+    * <https://github.com/pytorch/pytorch/issues/95062> ([PR](<https://github.com/pytorch/pytorch/pull/95221>))
     * <https://github.com/pytorch/pytorch/pull/102156>
     * <https://github.com/pytorch/pytorch/pull/105537>
     * <https://github.com/pytorch/pytorch/pull/103667>
@@ -117,6 +123,16 @@
     * <https://github.com/pytorch/pytorch/pull/108417>
     * <https://github.com/pytorch/pytorch/pull/108418>
     * <https://github.com/pytorch/pytorch/pull/109794>
+    * <https://github.com/pytorch/pytorch/issues/127404> ([PR](<https://github.com/pytorch/pytorch/pull/127413>))
+    * <https://github.com/pytorch/pytorch/issues/127405> ([PR](<https://github.com/pytorch/pytorch/pull/127413>))
+    * <https://github.com/pytorch/pytorch/issues/127406> ([PR](<https://github.com/pytorch/pytorch/pull/127413>))
+    * <https://github.com/pytorch/pytorch/issues/127407> ([PR](<https://github.com/pytorch/pytorch/pull/127413>))
+    * <https://github.com/pytorch/pytorch/issues/127408> ([PR](<https://github.com/pytorch/pytorch/pull/127413>))
+    * <https://github.com/pytorch/pytorch/issues/127409> ([PR](<https://github.com/pytorch/pytorch/pull/127413>))
+    * <https://github.com/pytorch/pytorch/issues/127410> ([PR](<https://github.com/pytorch/pytorch/pull/127413>))
+    * <https://github.com/pytorch/pytorch/issues/127411> ([PR](<https://github.com/pytorch/pytorch/pull/127413>))
+    * <https://github.com/pytorch/pytorch/pull/127437>
+    * <https://github.com/pytorch/pytorch/pull/127526>
 * Rizin:
     * [rizinorg/rizin@6b118bf](https://github.com/rizinorg/rizin/commit/6b118bf67300182cb068d9e9bb23e85bd052bf86) (PR: <https://github.com/rizinorg/rizin/pull/2930>)
     * [rizinorg/rizin@eb7e0ef](https://github.com/rizinorg/rizin/commit/eb7e0efe3876a3b9322d0a74860b40010fd6b1cf) (PR: <https://github.com/rizinorg/rizin/pull/2930>)
@@ -166,6 +182,7 @@
     * <https://github.com/tensorflow/tensorflow/pull/60082>
     * <https://github.com/tensorflow/tensorflow/pull/60933>
     * <https://github.com/tensorflow/tensorflow/pull/61913>
+    * <https://github.com/tensorflow/tensorflow/pull/62356>
 * Torchvision:
     * <https://github.com/pytorch/vision/pull/6456>
     * <https://github.com/pytorch/vision/pull/7691>

@@ -24,12 +24,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         rsync \
         vim \
         moreutils \
+        patchelf \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m pip install --upgrade pip
-
 RUN python3 -m pip install --upgrade pyinstaller
 
 # Due to Bazel bug, need to symlink python3 to python
@@ -43,7 +43,7 @@ RUN curl -Lo /usr/bin/bazel \
     chmod +x /usr/bin/bazel
 
 RUN git clone https://github.com/tensorflow/tensorflow tensorflow && \
-    cd tensorflow && git checkout 6621be46794781c2ecdb0fa1db52b5544ccdfbcb
+    cd tensorflow && git checkout v2.16.1
 
 WORKDIR /tensorflow
 

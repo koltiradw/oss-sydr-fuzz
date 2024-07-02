@@ -7,12 +7,18 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install -y build-essential gcc g++ gcc-9-plugin-dev \
         gcc-multilib-arm-linux-gnueabi g++-multilib-arm-linux-gnueabi \
-        libglib2.0-dev libtool python-dev python3-pip lsb-release pkg-config \
-        vim curl lcov gnuplot wget unzip m4 software-properties-common \
-        zlib1g-dev git texinfo bison zip htop psutils
+        libglib2.0-dev libtool python3.9 python3.9-dev python3-pip \
+        lsb-release pkg-config vim curl lcov gnuplot wget unzip m4 \
+        software-properties-common zlib1g-dev git texinfo bison zip htop psutils
 
-# Add gcc repository
-RUN add-apt-repository ppa:ubuntu-toolchain-r/test
+RUN rm /usr/bin/python3 && ln -s /usr/bin/python3.9 /usr/bin/python3
+RUN pip3 install --upgrade pip
+
+# Fix add-apt-repository for python3.9
+RUN cd /usr/lib/python3/dist-packages && cp apt_pkg.cpython-38-aarch64-linux-gnu.so apt_pkg.so && \
+    apt-get install -y libcairo2-dev libgirepository1.0-dev && \
+    pip3 install --ignore-installed PyGObject && \
+    sed -i 's/isAlive()/is_alive()/g' /usr/lib/python3/dist-packages/softwareproperties/SoftwareProperties.py
 
 # Add clang repositories
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
@@ -76,11 +82,13 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 
 RUN cargo install cargo-fuzz
 
-RUN cargo install afl
+RUN cargo install afl@0.13.5
 
 RUN rustup component add llvm-tools-preview
 
 RUN rustup component add rust-src --toolchain nightly
+
+RUN rustup component add rustfmt clippy
 
 ADD https://raw.githubusercontent.com/vanhauser-thc/qemu_driver/master/qemu_driver.c /opt/
 ADD https://raw.githubusercontent.com/llvm/llvm-project/main/compiler-rt/lib/fuzzer/standalone/StandaloneFuzzTargetMain.c /opt/
@@ -99,9 +107,21 @@ ENV AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
 ENV IS_DOCKER="1"
 
 RUN git clone https://github.com/AFLplusplus/AFLplusplus.git && cd AFLplusplus && \
-    git checkout 4.08c && export CC=clang-14 && export CXX=clang++-14 && \
+    git checkout v4.21c && export CC=clang-14 && export CXX=clang++-14 && \
     export LD_LIBRARY_PATH="$(llvm-config-14 --libdir)${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" && make clean && \
-    make distrib -j $(nproc) && make install -j $(nproc) && make clean && cd .. && rm -rf AFLplusplus
+    PERFORMANCE=1 make distrib -j $(nproc) && make install -j $(nproc) && make clean && cd .. && rm -rf AFLplusplus
+
+# Install .NET, Sharpfuzz, minicover, altcover.
+RUN wget https://download.visualstudio.microsoft.com/download/pr/092bec24-9cad-421d-9b43-458b3a7549aa/84280dbd1eef750f9ed1625339235c22/dotnet-sdk-8.0.101-linux-arm64.tar.gz
+RUN mkdir /dotnet && tar zxf dotnet-sdk-8.0.101-linux-arm64.tar.gz -C /dotnet && rm -rf dotnet-sdk-8.0.101-linux-arm64.tar.gz
+ENV DOTNET_ROOT=/dotnet
+ENV PATH=$PATH:/dotnet
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
+ENV DOTNET_UPGRADEASSISTANT_TELEMETRY_OPTOUT=1
+RUN dotnet tool install SharpFuzz.CommandLine --global
+RUN dotnet tool install minicover --global
+RUN dotnet tool install altcover.global --global
+ENV PATH=$PATH:/root/.dotnet/tools
 
 ENV PATH=$PATH:/fuzz/sydr
 
